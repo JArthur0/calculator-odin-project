@@ -1,0 +1,32 @@
+.main {
+    width: 350px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.display {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-basis: 40px;
+}
+
+p {
+    margin: 0;
+    font-size: 50px;
+}
+
+.buttons {
+    width: 350px;
+    flex-grow: 5;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0px;
+}
+
+button {
+    flex-grow: 1;
+    flex-basis: 75px;
+}
