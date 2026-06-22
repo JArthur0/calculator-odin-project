@@ -2,10 +2,11 @@ const buttons = document.querySelector(".buttons");
 const displayTxt = document.querySelector(".display-text");
 let input = "";
 
-let state = 1;
 let aNumber = 0;
 let bNumber = 0;
+let firstOperation = true;
 let operator = "";
+let b = false;
 
 function add(a, b) {
   return a + b;
@@ -38,72 +39,50 @@ buttons.addEventListener("mousedown", (e) => {
   if (!isNaN(parseInt(value))) {
     input += `${value}`;
     displayTxt.textContent = input;
+    b = true;
   }
 
-  if (value === "=" && input != "") {
-    bNumber = parseInt(input);
-    input = "";
-    displayTxt.textContent = operate(operator, aNumber, bNumber);
-  }
-
-  if (
-    isNaN(parseInt(value)) &&
-    value != "del" &&
-    value != "=" &&
-    value != "." &&
-    input != ""
-  ) {
-    switch (state) {
-      case 1:
-        aNumber = parseInt(input);
-        input = "";
-        operator = value;
-        state++;
-        console.log("case1");
-        break;
-      case 2:
-        bNumber = parseInt(input);
-        input = "";
+  if (value === "+" || value === "/" || value === "*" || value === "-") {
+    if (firstOperation) {
+      if (input === "") return;
+      aNumber = parseInt(input);
+      operator = value;
+      input = "";
+      firstOperation = false;
+    }
+    else {
+      if (b) {  
+        if (input === "") input = bNumber;
+        bNumber = parseInt(input)
         aNumber = operate(operator, aNumber, bNumber);
-        displayTxt.textContent = aNumber;
         operator = value;
-        // state++;
-        console.log("case2");
-        break;
-      case 3:
-        aNumber = operate(operator, aNumber, bNumber);
         displayTxt.textContent = aNumber;
-        state--;
-        console.log("case3");
-        break;
+        input = "";
+         b = false;
+      } else {
+        operator = value;
+      }
     }
   }
+
+  if (value === "=") {
+    if (input === "") input = bNumber;
+    bNumber = parseInt(input);
+    aNumber = operate(operator, aNumber, bNumber);
+    displayTxt.textContent = aNumber;
+    input = "";
+    b = false;
+  }
+
+  if(value === "del"){
+    input = "";
+    aNumber = 0;
+    bNumber = 0;
+    operator = "";
+    firstOperation = true;
+    b = false;
+    displayTxt.textContent = "0"
+  }
+  
 });
 
-// aNumber = parseInt(input);
-// input = "";
-// operator = value;
-// buttons.addEventListener("mousedown", (e) => {
-//   let value = e.target.textContent;
-
-//   console.log(value);
-//   if (isNaN(parseInt(value))) {
-//     switch (value) {
-//       case "=":
-//         console.log("CRAZY");
-//         break;
-//     }
-//   }
-// });
-
-// if (value === "+" || value === "/" || value === "*" || value === "-") {
-//   numbers.push(input);
-//   input = "";
-//   console.log("Crazy");
-// } else if (value === "del") {
-//   numbers = [];
-//   displayTxt.textContent = "0";
-// } else {
-//   input += `${value}`;
-//   displayTxt.textContent = input;
-// }
