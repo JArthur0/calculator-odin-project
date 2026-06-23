@@ -1,5 +1,6 @@
 const buttons = document.querySelector(".buttons");
 const displayTxt = document.querySelector(".display-text");
+const opTxt = document.querySelector(".operator-text");
 let input = "";
 
 let aNumber = 0;
@@ -50,6 +51,7 @@ function clearAll(value) {
     hasDot = false;
     isBroken = false;
     displayTxt.textContent = "0"
+    opTxt.textContent = ""
   }
 }
 function roundDecimal(op, a, b) {
@@ -84,6 +86,7 @@ function calcLogic(value) {
   if (!isBroken) {
     if (!isNaN(parseInt(value))) {
       if (input.length > 11) return;
+      if (firstOperation) opTxt.textContent = "" 
       input += `${value}`;
       displayTxt.textContent = input;
       hasInput = true;
@@ -94,6 +97,7 @@ function calcLogic(value) {
         if (input === "") return;
         aNumber = parseFloat(input);
         operator = value;
+        opTxt.textContent = value
         input = "";
         firstOperation = false;
         hasInput = false;
@@ -112,8 +116,10 @@ function calcLogic(value) {
           checkResult();
           checkDivide0();
           operator = value;
+          opTxt.textContent = value
         } else {
           operator = value;
+          opTxt.textContent = value
         }
       }
     }
@@ -130,6 +136,7 @@ function calcLogic(value) {
       firstOperation = true;
       checkDivide0();
       checkResult();
+      opTxt.textContent = "="
     }
 
     clearAll(value);
