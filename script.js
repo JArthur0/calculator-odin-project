@@ -4,6 +4,7 @@ let input = "";
 
 let aNumber = 0;
 let bNumber = 0;
+let result = 0;
 let operator = "";
 
 let hasDot = false;
@@ -64,15 +65,17 @@ function calcLogic(value) {
       operator = value;
       input = "";
       firstOperation = false;
+      hasInput =false;
       hasDot = false;
     }
     else {
       if (hasInput) {
         if (input === "") input = bNumber;
         bNumber = parseFloat(input)
-        aNumber = roundDecimal(operator, aNumber, bNumber);
+        result = roundDecimal(operator, aNumber, bNumber);
+        aNumber = result;
         operator = value;
-        displayTxt.textContent = aNumber;
+        displayTxt.textContent = result;
         input = "";
         hasInput = false;
         hasDot = false;
@@ -83,20 +86,25 @@ function calcLogic(value) {
   }
 
   if (value === "=" || value === "Enter") {
-    if (firstOperation) return;
+    if (!hasInput || aNumber === 0) {
+      
+      return;
+    }
+    else if(firstOperation) aNumber = result;
     if (input === "") input = bNumber;
     bNumber = parseFloat(input);
-    aNumber = roundDecimal(operator, aNumber, bNumber);
-    displayTxt.textContent = aNumber;
+    result = roundDecimal(operator, aNumber, bNumber);
+    displayTxt.textContent = result;
     input = "";
-    hasInput =false;
     hasDot = false;
+    firstOperation = true;
   }
 
   if (value === "del" || value === "Delete") {
     input = "";
     aNumber = 0;
     bNumber = 0;
+    result = 0;
     operator = "";
     firstOperation = true;
     hasInput =false;
