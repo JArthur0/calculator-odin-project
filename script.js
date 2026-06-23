@@ -8,7 +8,7 @@ let operator = "";
 
 let hasDot = false;
 let firstOperation = true;
-let b = false;
+let hasInput = false;
 
 function add(a, b) {
   return a + b;
@@ -34,18 +34,27 @@ function operate(op, a, b) {
       return divide(a, b);
   }
 }
-function roundDecimal(op,a,b){
-let number = Math.round(`${operate(op,a,b)}`+"e2") + "e-2";
-
-return parseFloat(number);
+function roundDecimal(op, a, b) {
+  let number = Math.round(`${operate(op, a, b)}` + "e2") + "e-2";
+  return parseFloat(number);
 }
 
 buttons.addEventListener("mousedown", (e) => {
-  let value = e.target.textContent;
+  const value = e.target.textContent;
+  calcLogic(value);
+});
+
+document.addEventListener("keydown", (e) => {
+  const keyName = e.key;
+  calcLogic(keyName);
+})
+
+function calcLogic(value) {
+
   if (!isNaN(parseInt(value))) {
     input += `${value}`;
     displayTxt.textContent = input;
-    b = true;
+    hasInput = true;
   }
 
   if (value === "+" || value === "/" || value === "*" || value === "-") {
@@ -58,15 +67,14 @@ buttons.addEventListener("mousedown", (e) => {
       hasDot = false;
     }
     else {
-      if (b) {
+      if (hasInput) {
         if (input === "") input = bNumber;
         bNumber = parseFloat(input)
         aNumber = roundDecimal(operator, aNumber, bNumber);
-        // operate(operator, aNumber, bNumber)
         operator = value;
         displayTxt.textContent = aNumber;
         input = "";
-        b = false;
+        hasInput = false;
         hasDot = false;
       } else {
         operator = value;
@@ -74,28 +82,36 @@ buttons.addEventListener("mousedown", (e) => {
     }
   }
 
-  if (value === "=") {
+  if (value === "=" || value === "Enter") {
+    if (firstOperation) return;
     if (input === "") input = bNumber;
     bNumber = parseFloat(input);
     aNumber = roundDecimal(operator, aNumber, bNumber);
     displayTxt.textContent = aNumber;
     input = "";
-    b = false;
+    hasInput =false;
     hasDot = false;
   }
 
-  if (value === "del") {
+  if (value === "del" || value === "Delete") {
     input = "";
     aNumber = 0;
     bNumber = 0;
     operator = "";
     firstOperation = true;
-    b = false;
+    hasInput =false;
     hasDot = false;
     displayTxt.textContent = "0"
   }
 
-  if (value === ".") {
+  if (value === "Backspace") {
+    if (input === "") return;
+    let temp = input.at(-1);
+    input = input.replace(temp, "")
+    displayTxt.textContent = input;
+  }
+
+  if (value === "." || value === ",") {
     if (hasDot || input === "") {
       return;
     }
@@ -103,5 +119,4 @@ buttons.addEventListener("mousedown", (e) => {
     displayTxt.textContent = input;
     hasDot = true;
   }
-});
-
+}
